@@ -22,6 +22,7 @@ public class EventoResources {
     
     @PostMapping("evento")
     public Evento create(@RequestBody Evento evento) {
+        System.out.println("Criando evento " + evento);
         return repository.save(evento);
     }
 }

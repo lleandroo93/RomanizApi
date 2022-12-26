@@ -11,18 +11,23 @@ import br.com.trilhabit.romaniz.repository.PessoaRepository;
 import br.com.trilhabit.romaniz.repository.UfRepository;
 import java.util.List;
 import java.util.Optional;
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/pessoa")
 public class PessoaResources {
-    
+
     @Autowired
     private PessoaRepository repository;
     @Autowired
@@ -31,16 +36,25 @@ public class PessoaResources {
     private CidadeRepository cidadeRepository;
     @Autowired
     private BairroRepository bairroRepository;
-    
+
     @GetMapping
-    public List<Pessoa> listAll() {
-         return repository.findAll();
+    public ResponseEntity<List<Pessoa>> listar() {
+        List<Pessoa> pessoas = repository.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(pessoas);
     }
-   
-    @PostMapping("pessoa")
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Pessoa>> criteria(
+            @RequestParam String criteria,
+            @RequestParam(required = false, defaultValue = "100") Integer limit) {
+        Page<Pessoa> result = repository.findByNomeIgnoreCaseContaining(criteria, PageRequest.of(0, limit, Sort.by(Sort.Direction.ASC, "nome")));
+        return ResponseEntity.status(HttpStatus.OK).body(result.get().toList());
+    }
+
+    @PostMapping
     public ResponseEntity<Pessoa> create(@RequestBody CadastroPessoaDto dto) {
         System.out.println("Criando pessoa " + dto);
-        
+
         Pessoa pessoa = new Pessoa();
         pessoa.setNome(dto.nome());
         pessoa.setEndereco(dto.endereco());
@@ -51,16 +65,16 @@ public class PessoaResources {
             Optional<Uf> optUf = ufRepository.findById(dto.uf());
             pessoa.setUf(optUf.orElse(null));
         }
-        if (dto.cidade()!= null) {
+        if (dto.cidade() != null) {
             Optional<Cidade> optCidade = cidadeRepository.findById(dto.uf());
             pessoa.setCidade(optCidade.orElse(null));
         }
-        if (dto.bairro()!= null) {
+        if (dto.bairro() != null) {
             Optional<Bairro> optBairro = bairroRepository.findById(dto.uf());
             pessoa.setBairro(optBairro.orElse(null));
         }
         pessoa.setGoogleMaps(dto.googleMaps());
-        
+
         Pessoa save = repository.save(pessoa);
         return ResponseEntity.status(HttpStatus.CREATED).body(save);
     }

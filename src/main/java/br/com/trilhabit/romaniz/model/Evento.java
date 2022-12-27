@@ -29,7 +29,9 @@ public class Evento implements Serializable {
     private String descricao;
     private String observacao;
     @Temporal(TemporalType.TIMESTAMP)
-    private Date data;
+    private Date dataInicio;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataFim;
     @ManyToOne
     @JoinColumn(name = "pessoa")
     private Pessoa pessoa;
@@ -40,10 +42,13 @@ public class Evento implements Serializable {
         this.titulo = dto.titulo();
         this.descricao = dto.descricao();
         this.observacao = dto.observacao();
-        this.data = dto.data();
+        this.dataInicio = dto.dataInicio();
+        this.dataFim = dto.dataFim();
     }
 
     public ConsultaEventoRetornoDto toConsultaEventoRetornoDto() {
-        return new ConsultaEventoRetornoDto(titulo, data.getTime());
+        return new ConsultaEventoRetornoDto(titulo, 
+                dataInicio.getTime(), 
+                dataFim.getTime());
     }
 }

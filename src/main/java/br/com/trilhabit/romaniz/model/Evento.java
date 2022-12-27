@@ -1,20 +1,26 @@
 package br.com.trilhabit.romaniz.model;
 
+import br.com.trilhabit.romaniz.model.dto.cadastro.evento.CadastroEventoDto;
+import br.com.trilhabit.romaniz.model.dto.consulta.ConsultaEventoRetornoDto;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Evento implements Serializable {
-    
+
     @Id
     @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
     @GeneratedValue(generator = "UUIDGenerator")
@@ -24,7 +30,20 @@ public class Evento implements Serializable {
     private String observacao;
     @Temporal(TemporalType.TIMESTAMP)
     private Date data;
-//    private Pessoa pessoa;
+    @ManyToOne
+    @JoinColumn(name = "pessoa")
+    private Pessoa pessoa;
 //    private Endereco enderecoDiferente;
     private String status;
+
+    public Evento(CadastroEventoDto dto) {
+        this.titulo = dto.titulo();
+        this.descricao = dto.descricao();
+        this.observacao = dto.observacao();
+        this.data = dto.data();
+    }
+
+    public ConsultaEventoRetornoDto toConsultaEventoRetornoDto() {
+        return new ConsultaEventoRetornoDto(titulo, data.getTime());
+    }
 }

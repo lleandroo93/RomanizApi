@@ -4,7 +4,8 @@ import br.com.trilhabit.romaniz.model.Bairro;
 import br.com.trilhabit.romaniz.model.Cidade;
 import br.com.trilhabit.romaniz.model.Pessoa;
 import br.com.trilhabit.romaniz.model.Uf;
-import br.com.trilhabit.romaniz.model.dto.cadastro.CadastroPessoaDto;
+import br.com.trilhabit.romaniz.model.dto.cadastro.pessoa.CadastroPessoaDto;
+import br.com.trilhabit.romaniz.model.dto.consulta.ConsultaPessoaRetornoDto;
 import br.com.trilhabit.romaniz.repository.BairroRepository;
 import br.com.trilhabit.romaniz.repository.CidadeRepository;
 import br.com.trilhabit.romaniz.repository.PessoaRepository;
@@ -44,11 +45,11 @@ public class PessoaResources {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Pessoa>> criteria(
+    public ResponseEntity<List<ConsultaPessoaRetornoDto>> criteria(
             @RequestParam String criteria,
             @RequestParam(required = false, defaultValue = "100") Integer limit) {
         Page<Pessoa> result = repository.findByNomeIgnoreCaseContaining(criteria, PageRequest.of(0, limit, Sort.by(Sort.Direction.ASC, "nome")));
-        return ResponseEntity.status(HttpStatus.OK).body(result.get().toList());
+        return ResponseEntity.status(HttpStatus.OK).body(result.get().map(p -> p.toConsultaPessoaRetornoDto()).toList());
     }
 
     @PostMapping

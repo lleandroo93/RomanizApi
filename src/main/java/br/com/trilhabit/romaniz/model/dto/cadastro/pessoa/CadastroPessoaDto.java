@@ -1,4 +1,4 @@
-package br.com.trilhabit.romaniz.model.dto.cadastro;
+package br.com.trilhabit.romaniz.model.dto.cadastro.pessoa;
 
 import java.util.UUID;
 

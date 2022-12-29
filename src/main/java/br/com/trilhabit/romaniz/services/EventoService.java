@@ -23,7 +23,7 @@ public class EventoService {
 
     public Evento novoEvento(CadastroEventoDto dto) {
         Pessoa contato = null;
-        if (dto.contato().id() != null) {
+        if (dto.contato() != null && dto.contato().id() != null) {
             Optional<Pessoa> optPessoa = pessoaService.selecionar(dto.contato().id());
             if (optPessoa.isPresent()) {
                 contato = optPessoa.get();

@@ -40,9 +40,9 @@ public class PessoaResources {
     private BairroRepository bairroRepository;
 
     @GetMapping
-    public ResponseEntity<List<Pessoa>> listar() {
+    public ResponseEntity<List<ConsultaPessoaRetornoDto>> listar() {
         List<Pessoa> pessoas = repository.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(pessoas);
+        return ResponseEntity.status(HttpStatus.OK).body(pessoas.stream().map(p -> p.toConsultaPessoaRetornoDto()).toList());
     }
 
     @GetMapping("/search")

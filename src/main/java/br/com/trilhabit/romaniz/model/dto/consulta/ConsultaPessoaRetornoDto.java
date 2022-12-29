@@ -6,6 +6,7 @@ public record ConsultaPessoaRetornoDto(
         UUID id,
         String nome,
         String telefone,
-        String grupo) {
+        String grupo,
+        String endereco) {
     
 }

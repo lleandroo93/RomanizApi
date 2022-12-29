@@ -23,6 +23,7 @@ public class Grupo implements Serializable {
     private String nome;
     
     public Grupo(CadastroGrupoDto dto) {
+        this.id = dto.id();
         this.nome = dto.nome();
     }
     

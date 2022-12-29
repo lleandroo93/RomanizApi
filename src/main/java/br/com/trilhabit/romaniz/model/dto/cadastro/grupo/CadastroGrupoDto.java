@@ -1,5 +1,7 @@
 package br.com.trilhabit.romaniz.model.dto.cadastro.grupo;
 
-public record CadastroGrupoDto(String nome) {
+import java.util.UUID;
+
+public record CadastroGrupoDto(UUID id, String nome) {
     
 }

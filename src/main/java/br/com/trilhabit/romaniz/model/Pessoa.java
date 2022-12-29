@@ -25,7 +25,8 @@ public class Pessoa implements Serializable {
     private String nome;
     private String endereco;
     private String telefone;
-    private String grupo;
+    @ManyToOne
+    private Grupo grupo;
     private String resumo;
     @ManyToOne
     private Uf uf;
@@ -46,7 +47,7 @@ public class Pessoa implements Serializable {
                 id,
                 nome,
                 telefone,
-                grupo,
+                grupo == null ? "" : grupo.getNome(),
                 getEnderecoFormatado());
     }
 

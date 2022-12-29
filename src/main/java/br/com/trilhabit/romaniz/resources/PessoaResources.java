@@ -2,6 +2,7 @@ package br.com.trilhabit.romaniz.resources;
 
 import br.com.trilhabit.romaniz.model.Bairro;
 import br.com.trilhabit.romaniz.model.Cidade;
+import br.com.trilhabit.romaniz.model.Grupo;
 import br.com.trilhabit.romaniz.model.Pessoa;
 import br.com.trilhabit.romaniz.model.Uf;
 import br.com.trilhabit.romaniz.model.dto.cadastro.pessoa.CadastroPessoaCompletoDto;
@@ -11,6 +12,7 @@ import br.com.trilhabit.romaniz.repository.BairroRepository;
 import br.com.trilhabit.romaniz.repository.CidadeRepository;
 import br.com.trilhabit.romaniz.repository.PessoaRepository;
 import br.com.trilhabit.romaniz.repository.UfRepository;
+import br.com.trilhabit.romaniz.services.GrupoService;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,8 @@ public class PessoaResources {
     private CidadeRepository cidadeRepository;
     @Autowired
     private BairroRepository bairroRepository;
+    @Autowired
+    private GrupoService grupoService;
 
     @GetMapping
     public ResponseEntity<List<ConsultaPessoaRetornoDto>> listar() {
@@ -74,8 +78,16 @@ public class PessoaResources {
         pessoa.setNome(dto.nome());
         pessoa.setEndereco(dto.endereco());
         pessoa.setTelefone(dto.telefone());
-        pessoa.setGrupo(dto.grupo());
         pessoa.setResumo(dto.resumo());
+
+        if (dto.grupo() != null) {
+            Grupo grupo = new Grupo(dto.grupo());
+            
+            if (grupo.getId() == null) {
+                grupo = grupoService.salvar(grupo);
+            }
+            pessoa.setGrupo(grupo);
+        }
         if (dto.uf() != null) {
             Optional<Uf> optUf = ufRepository.findById(dto.uf());
             pessoa.setUf(optUf.orElse(null));

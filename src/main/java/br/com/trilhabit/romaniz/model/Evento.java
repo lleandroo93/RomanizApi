@@ -5,6 +5,7 @@ import br.com.trilhabit.romaniz.model.dto.consulta.ConsultaEventoRetornoDto;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -49,6 +50,6 @@ public class Evento implements Serializable {
     public ConsultaEventoRetornoDto toConsultaEventoRetornoDto() {
         return new ConsultaEventoRetornoDto(titulo, 
                 dataInicio.getTime(), 
-                dataFim.getTime());
+                dataFim == null ? null : dataFim.getTime());
     }
 }

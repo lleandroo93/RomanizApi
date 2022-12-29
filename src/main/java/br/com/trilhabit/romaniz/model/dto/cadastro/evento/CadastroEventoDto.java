@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public record CadastroEventoDto(
+        UUID id,
         Date dataInicio,
         Date dataFim,
         CadastroEventoContatoDto contato,

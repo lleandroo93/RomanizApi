@@ -7,7 +7,9 @@ import br.com.trilhabit.romaniz.services.EventoService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,5 +27,10 @@ public class EventoResources {
     @PostMapping("evento")
     public Evento create(@RequestBody CadastroEventoDto dto) {
         return service.novoEvento(dto);
+    }
+
+    @PutMapping("evento/{id}")
+    public Evento update(@RequestBody CadastroEventoDto dto, @PathVariable String id) {
+        return service.alterarEvento(id, dto);
     }
 }

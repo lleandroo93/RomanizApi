@@ -4,7 +4,8 @@ import br.com.trilhabit.romaniz.model.Bairro;
 import br.com.trilhabit.romaniz.model.Cidade;
 import br.com.trilhabit.romaniz.model.Pessoa;
 import br.com.trilhabit.romaniz.model.Uf;
-import br.com.trilhabit.romaniz.model.dto.cadastro.pessoa.CadastroPessoaDto;
+import br.com.trilhabit.romaniz.model.dto.cadastro.pessoa.CadastroPessoaCompletoDto;
+import br.com.trilhabit.romaniz.model.dto.cadastro.pessoa.CadastroPessoaSimplesDto;
 import br.com.trilhabit.romaniz.model.dto.consulta.ConsultaPessoaRetornoDto;
 import br.com.trilhabit.romaniz.repository.BairroRepository;
 import br.com.trilhabit.romaniz.repository.CidadeRepository;
@@ -52,8 +53,21 @@ public class PessoaResources {
         return ResponseEntity.status(HttpStatus.OK).body(result.get().map(p -> p.toConsultaPessoaRetornoDto()).toList());
     }
 
-    @PostMapping
-    public ResponseEntity<Pessoa> create(@RequestBody CadastroPessoaDto dto) {
+    @PostMapping("/simples")
+    public ResponseEntity<Pessoa> create(@RequestBody CadastroPessoaSimplesDto dto) {
+        System.out.println("Criando pessoa " + dto);
+
+        Pessoa pessoa = new Pessoa();
+        pessoa.setNome(dto.nome());
+        pessoa.setTelefone(dto.telefone());
+        pessoa.setResumo(dto.resumo());
+
+        Pessoa save = repository.save(pessoa);
+        return ResponseEntity.status(HttpStatus.CREATED).body(save);
+    }
+
+    @PostMapping("/completo")
+    public ResponseEntity<Pessoa> create(@RequestBody CadastroPessoaCompletoDto dto) {
         System.out.println("Criando pessoa " + dto);
 
         Pessoa pessoa = new Pessoa();

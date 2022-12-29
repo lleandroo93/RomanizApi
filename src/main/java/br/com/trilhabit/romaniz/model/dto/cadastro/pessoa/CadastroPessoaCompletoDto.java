@@ -2,7 +2,7 @@ package br.com.trilhabit.romaniz.model.dto.cadastro.pessoa;
 
 import java.util.UUID;
 
-public record CadastroPessoaDto(
+public record CadastroPessoaCompletoDto(
         String nome,
         String endereco,
         String telefone,
